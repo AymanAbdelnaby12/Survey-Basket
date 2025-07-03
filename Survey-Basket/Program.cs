@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using Survey_Basket.Persistance;
+using SurveyBasket.Services;
+
 namespace Survey_Basket
 {
     public class Program
@@ -13,6 +17,9 @@ namespace Survey_Basket
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IPollService, PollService>();
 
             var app = builder.Build();
 
