@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Contracts.Responses;
+﻿namespace Survey_Basket.Contracts.Poll;
 
 public record PollResponse(
     int Id,

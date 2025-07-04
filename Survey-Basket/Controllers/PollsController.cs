@@ -1,15 +1,16 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Survey_Basket.Contracts.Poll;
 using Survey_Basket.Models;
-using SurveyBasket.Contracts.Requests;
-using SurveyBasket.Contracts.Responses;
 using SurveyBasket.Services;
 
 namespace SurveyBasket.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PollsController(IPollService pollService) : ControllerBase
 {
     private readonly IPollService _pollService = pollService;

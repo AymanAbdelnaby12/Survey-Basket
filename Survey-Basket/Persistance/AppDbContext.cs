@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Survey_Basket.Models;
 using Survey_Basket.Persistance.EntitiesConfig;
@@ -6,7 +7,7 @@ using System.Reflection;
 
 namespace Survey_Basket.Persistance
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext: IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

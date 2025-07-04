@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using SurveyBasket.Contracts.Requests;
 
-namespace SurveyBasket.Contracts.Validations;
+namespace Survey_Basket.Contracts.Poll;
 
-public class PollRequestValidator : AbstractValidator<PollRequest>
+public class loginRequestValidator : AbstractValidator<PollRequest>
 { 
-    public PollRequestValidator()
+    public loginRequestValidator()
     {
         RuleFor(p => p.Title)
             .NotEmpty().WithMessage("Title is required.")
