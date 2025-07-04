@@ -2,8 +2,7 @@
 
 public record PollRequest(
     string Title,
-    string Description,
-    bool IsPublished,
+    string Description, 
     DateOnly StartsAt,
     DateOnly EndsAt
 );
