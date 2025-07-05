@@ -14,7 +14,7 @@ namespace Survey_Basket.Persistance.EntitiesConfig
                    .IsRequired()
                    .HasMaxLength(100);
             builder.Property(p => p.Description)
-                    .HasMaxLength(500);  
+                    .HasMaxLength(500);   
         }
     }
 }

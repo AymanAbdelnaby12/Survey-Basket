@@ -8,6 +8,7 @@
 
             builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
+
             builder.Services.AddDependencies(builder.Configuration);
 
             var app = builder.Build();
@@ -21,7 +22,7 @@
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            //app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
 
             app.Run();

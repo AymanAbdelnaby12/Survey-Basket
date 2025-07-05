@@ -4,20 +4,44 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Survey_Basket.Models;
 using Survey_Basket.Persistance.EntitiesConfig;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace Survey_Basket.Persistance
 {
-    public class AppDbContext: IdentityDbContext
+    public class AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) :
+       IdentityDbContext<ApplicationUser>(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        } 
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+        public DbSet<Poll> Polls { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Apply configurations for entities
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            base.OnModelCreating(modelBuilder); 
+
+            base.OnModelCreating(modelBuilder);
         }
-        public DbSet<Poll> Polls { get; set; }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries<AuditableEntity>();
+
+            foreach (var entityEntry in entries)
+            {
+                var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    entityEntry.Property(x => x.CreatedById).CurrentValue = currentUserId;
+                }
+                else if (entityEntry.State == EntityState.Modified)
+                {
+                    entityEntry.Property(x => x.UpdatedById).CurrentValue = currentUserId;
+                    entityEntry.Property(x => x.UpdatedOn).CurrentValue = DateTime.UtcNow;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }
