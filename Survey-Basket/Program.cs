@@ -20,7 +20,7 @@
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAll");
             app.UseAuthorization();
             //app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
