@@ -1,9 +1,6 @@
 ﻿using Mapster;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Survey_Basket.Contracts.Poll;
-using Survey_Basket.Models;
 using SurveyBasket.Services;
 
 namespace SurveyBasket.Controllers;
@@ -19,46 +16,41 @@ public class PollsController(IPollService pollService) : ControllerBase
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var polls = await _pollService.GetAllAsync();
-
         var response = polls.Adapt<IEnumerable<PollResponse>>();
-
         return Ok(response);
     }
 
-    [HttpGet("{id}")] 
-    public async Task<IActionResult> Get([FromRoute] int id )
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
-        var pollResult = await _pollService.GetAsync(id ); 
+        var pollResult = await _pollService.GetAsync(id);
         return pollResult.IsSuccess
-           ? Ok(pollResult.Value)
-           : Problem(
-               statusCode: StatusCodes.Status404NotFound,
-               title: pollResult.Error.Code,
-               detail: pollResult.Error.Description
-           );
-
+            ? Ok(pollResult.Value)
+            : Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: pollResult.Error.Code,
+                detail: pollResult.Error.Description
+            );
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Add([FromBody] PollRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Add([FromBody] PollRequest request, CancellationToken cancellationToken)
     {
         var newPoll = await _pollService.AddAsync(request, cancellationToken);
         return CreatedAtAction(nameof(Get), new { id = newPoll.Id }, newPoll);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PollRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PollRequest request, CancellationToken cancellationToken)
     {
         var isUpdated = await _pollService.UpdateAsync(id, request, cancellationToken);
         return isUpdated.IsSuccess
-            ? Ok("The Poll Is Updated")
-            :  Problem(
-               statusCode: StatusCodes.Status404NotFound,
-               title: isUpdated.Error.Code,
-               detail: isUpdated.Error.Description
-           );
+            ? Ok("The Poll is updated")
+            : Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: isUpdated.Error.Code,
+                detail: isUpdated.Error.Description
+            );
     }
 
     [HttpDelete("{id}")]
@@ -66,12 +58,12 @@ public class PollsController(IPollService pollService) : ControllerBase
     {
         var isDeleted = await _pollService.DeleteAsync(id, cancellationToken);
         return isDeleted.IsSuccess
-            ? Ok("The Poll Is Deleted")
+            ? Ok("The Poll is deleted")
             : Problem(
-               statusCode: StatusCodes.Status404NotFound,
-               title: isDeleted.Error.Code,
-               detail: isDeleted.Error.Description
-           ); 
+                statusCode: StatusCodes.Status404NotFound,
+                title: isDeleted.Error.Code,
+                detail: isDeleted.Error.Description
+            );
     }
 
     [HttpPut("{id}/togglePublish")]
@@ -79,11 +71,11 @@ public class PollsController(IPollService pollService) : ControllerBase
     {
         var isUpdated = await _pollService.TogglePublishStatusAsync(id, cancellationToken);
         return isUpdated.IsSuccess
-            ? Ok("The Poll togglePublish Status Is Updated")
+            ? Ok("The Poll togglePublish status is updated")
             : Problem(
-               statusCode: StatusCodes.Status404NotFound,
-               title: isUpdated.Error.Code,
-               detail: isUpdated.Error.Description
-           );
+                statusCode: StatusCodes.Status404NotFound,
+                title: isUpdated.Error.Code,
+                detail: isUpdated.Error.Description
+            );
     }
 }

@@ -12,7 +12,7 @@ public class PollService : IPollService
     private readonly AppDbContext _context;
 
     public PollService(AppDbContext context)
-    { 
+    {
         _context = context;
     }
 
@@ -24,13 +24,12 @@ public class PollService : IPollService
         var poll = await _context.Polls.FindAsync(id, cancellationToken);
         return poll is null
             ? Result.Failure<PollResponse>(PollErrors.PollNotFound)
-            : Result.Success(poll.Adapt<PollResponse>());   
+            : Result.Success(poll.Adapt<PollResponse>());
     }
-
 
     public async Task<PollResponse> AddAsync(PollRequest pollRequest, CancellationToken cancellationToken = default)
     {
-        var poll=pollRequest.Adapt<Poll>();
+        var poll = pollRequest.Adapt<Poll>();
 
         await _context.AddAsync(poll, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -42,7 +41,7 @@ public class PollService : IPollService
     {
         var result = await _context.Polls.FindAsync(id, cancellationToken);
 
-         if (result is null)
+        if (result is null)
             return Result.Failure(PollErrors.PollNotFound);
 
         result.Title = pollRequest.Title;
@@ -57,13 +56,12 @@ public class PollService : IPollService
 
     public async Task<Result> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        var poll = await GetAsync(id, cancellationToken);
+        var poll = await _context.Polls.FindAsync(id, cancellationToken);
 
         if (poll is null)
             return Result.Failure(PollErrors.PollNotFound);
 
         _context.Remove(poll);
-
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
@@ -76,7 +74,6 @@ public class PollService : IPollService
             return Result.Failure(PollErrors.PollNotFound);
 
         poll.IsPublished = !poll.IsPublished;
-
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

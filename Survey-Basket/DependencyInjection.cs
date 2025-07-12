@@ -2,14 +2,15 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using SurveyBasket.Authentication;
-using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Survey_Basket.Models;
 using Survey_Basket.Persistance;
 using Survey_Basket.Services;
-using Survey_Basket.Models;
+using SurveyBasket.Authentication;
+using SurveyBasket.Errors;
 using SurveyBasket.Services;
+using System.Reflection;
+using System.Text;
 
 namespace SurveyBasket;
 
@@ -35,6 +36,11 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPollService, PollService>();
+
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
+
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", builder =>

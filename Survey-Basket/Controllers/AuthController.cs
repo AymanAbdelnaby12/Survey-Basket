@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Survey_Basket.Contracts.Authentication;
 using Survey_Basket.Services;
 using SurveyBasket.Abstractions;
-using SurveyBasket.Contracts.Authentication;
+using SurveyBasket.Contracts.Authentication; 
+
 
 namespace Survey_Basket.Controllers
 {
@@ -17,6 +18,7 @@ namespace Survey_Basket.Controllers
         {
             _authService = authService;
         } 
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
