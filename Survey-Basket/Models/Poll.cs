@@ -9,8 +9,7 @@ namespace Survey_Basket.Models
         public string Description { get; set; }
         public DateOnly StartsAt { get; set; }
         public DateOnly EndsAt { get; set; }
-        public bool IsPublished { get; set; }   
-
-
+        public bool IsPublished { get; set; }
+        public ICollection<Question> Questions { get; set; } 
     }
 }

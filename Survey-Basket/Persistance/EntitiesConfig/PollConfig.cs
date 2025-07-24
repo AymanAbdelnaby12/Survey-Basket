@@ -4,7 +4,7 @@ using Survey_Basket.Models;
 
 namespace Survey_Basket.Persistance.EntitiesConfig
 {
-    public class PollConfig : IEntityTypeConfiguration<Models.Poll>
+    public class  PollConfig : IEntityTypeConfiguration<Models.Poll>
     {
         public void Configure(EntityTypeBuilder<Poll> builder)
         {
