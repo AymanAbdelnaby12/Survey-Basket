@@ -1,3 +1,4 @@
+﻿using SurveyBasket.Authentication;
 
 namespace Survey_Basket
 {
@@ -7,16 +8,14 @@ namespace Survey_Basket
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
+            builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+                .AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.Configure<JwtOptions>(
+                builder.Configuration.GetSection("Jwt"));
+            builder.Services.AddDependencies(builder.Configuration);
+            TypeAdapterConfig.GlobalSettings.Scan(typeof(Program).Assembly);
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,11 +23,11 @@ namespace Survey_Basket
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAll");
             app.UseAuthorization();
-
-
+            //app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
+            app.UseExceptionHandler();
 
             app.Run();
         }
